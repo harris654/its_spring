@@ -224,7 +224,7 @@
     .carousel-track img {
       min-width: 100%;
       width: 100%;
-      height: 320px;
+      height: 240px; /* ← était 320px */
       object-fit: cover;
       border-radius: 6px;
       display: block;
@@ -233,7 +233,7 @@
 
     .carousel-track .placeholder-slide {
       min-width: 100%;
-      height: 320px;
+      height: 240px; /* ← était 320px */
       background: linear-gradient(135deg, rgba(180,140,60,0.08), rgba(212,160,200,0.12));
       border: 2px dashed rgba(180,140,60,0.3);
       border-radius: 6px;
@@ -274,7 +274,7 @@
     }
 
     .insta-text {
-      font-size: 1.05rem;
+      font-size: 1.25rem;
       font-style: italic;
       color: rgba(30,40,40,0.75);
       text-align: center;
@@ -288,11 +288,11 @@
     .insta-link {
       font-style: normal;
       font-family: Georgia, serif;
-      font-size: 0.82rem;
+      font-size: 1rem;
       background: rgba(180,140,60,0.1);
       border: 1px solid rgba(180,140,60,0.45);
       border-radius: 20px;
-      padding: 5px 18px;
+      padding: 8px 24px;
       color: rgba(140,100,40,0.95);
       text-decoration: none;
       letter-spacing: 0.03em;
@@ -315,7 +315,7 @@
       .divider { letter-spacing: 5px; margin: 10px 0 16px; }
       .carousel-card { padding: 32px 16px 28px; }
       .carousel-title { font-size: 1.1rem; }
-      .carousel-track img, .placeholder-slide { height: 220px; }
+      .carousel-track img, .placeholder-slide { height: 180px; }
       .carousel-wrapper { max-width: 100%; }
       .insta-text { font-size: 0.95rem; flex-direction: column; gap: 12px; }
       .dynamic-link, .insta-link { padding: 8px 20px; font-size: 0.88rem; }
@@ -329,7 +329,7 @@
       .card { padding: 28px 14px 24px; }
       .title { font-size: 1.2rem; }
       .stanza { font-size: 0.92rem; }
-      .carousel-track img, .placeholder-slide { height: 180px; }
+      .carousel-track img, .placeholder-slide { height: 150px; }
     }
         /* ── Feuilles qui tombent ── */
     #falling-leaves {
@@ -444,7 +444,7 @@
       </div>
     </div>
     <div class="carousel-dots" id="carouselDots"></div>
-    <p class="insta-text">
+    <p class="insta-text" style="margin-top: 24px;">
       <em>Si vous voulez en voir plus, c&rsquo;est par ici&nbsp;</em>
       <a class="insta-link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">📷 Mon Instagram</a>
     </p>
