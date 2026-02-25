@@ -369,7 +369,7 @@
     </p>
     <p class="signature">
       Avec tout mon amour,
-      <span class="name"><img src="sig.png" alt="Maria" /></span>
+      <span class="name"><img id="signature" alt="Maria" /></span>
     </p>
   </main>
 
@@ -432,6 +432,12 @@
 </div>
 
 <script>
+
+  // ── Signature ──────────────────────────────
+  const SIG_URL = "https://i.ibb.co/5WCgCq9N/sig.jpg";
+  document.getElementById("signature").src = SIG_URL;
+// ───────────────────────────────────────────
+
   let currentSlide = 0;
   const track = document.getElementById('carouselTrack');
   const dotsContainer = document.getElementById('carouselDots');
