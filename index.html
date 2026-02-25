@@ -28,15 +28,82 @@
       width: 100%;
     }
 
-    /* ── Fleurs ── */
+    /* ── Fleurs grimpantes ── */
     .flowers {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       padding: 12px 0;
       min-width: 60px;
-      opacity: 0.85;
+      position: relative;
+    }
+
+    .vine {
+      position: relative;
+      width: 52px;
+      flex: 1;
+    }
+
+    .vine svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .vine-stem {
+      stroke-dasharray: 400;
+      stroke-dashoffset: 400;
+      animation: grow-stem 5s ease-in-out forwards;
+    }
+
+    .vine-leaf {
+      opacity: 0;
+      transform-box: fill-box;
+      transform-origin: right center;
+      animation: bloom-leaf 0.6s ease-out forwards, sway 3.5s ease-in-out 3s infinite;
+    }
+    .vine-leaf        { animation: bloom-leaf 0.6s ease-out forwards, sway 3.5s ease-in-out 6s infinite; }
+    .vine-leaf.l2     { animation-delay: 1.2s,  6.2s; }
+    .vine-leaf.l3     { animation-delay: 1.8s,  6.4s; }
+    .vine-leaf.l4     { animation-delay: 2.4s,  6.6s; }
+    .vine-leaf.l5     { animation-delay: 3.0s,  6.8s; }
+    .vine-leaf.l6     { animation-delay: 3.5s,  7.0s; }
+
+    .vine-flower.f1   { animation-delay: 4.0s,  7.5s; }
+    .vine-flower.f2   { animation-delay: 4.5s,  8.0s; }
+    .vine-flower.f3   { animation-delay: 5.0s,  8.5s; }
+
+
+    .vine-flower {
+      opacity: 0;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: bloom-flower 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+                 float 4s ease-in-out infinite;
+    }
+    .vine-flower.f1   { animation-delay: 4.0s,  7.5s; }
+    .vine-flower.f2   { animation-delay: 4.5s,  8.0s; }
+    .vine-flower.f3   { animation-delay: 5.0s,  8.5s; }
+
+    @keyframes grow-stem {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes bloom-leaf {
+      from { opacity: 0; transform: scale(0) rotate(-20deg); }
+      to   { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+    @keyframes bloom-flower {
+      from { opacity: 0; transform: scale(0); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes sway {
+      0%, 100% { transform: rotate(0deg); }
+      50%       { transform: rotate(5deg); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-3px); }
     }
 
     /* ── Carte ── */
@@ -100,6 +167,8 @@
       margin-bottom: 20px;
     }
 
+    .no-gap { margin-bottom: 4px; }
+
     .dynamic-link {
       display: inline-block;
       font-style: normal;
@@ -125,10 +194,7 @@
       color: rgba(80,60,50,0.7);
       margin-top: 28px;
     }
-    .signature .name {
-      display: block;
-      margin-top: 10px;
-    }
+    .signature .name { display: block; margin-top: 10px; }
     .signature .name img {
       height: 60px;
       width: auto;
@@ -250,110 +316,86 @@
        RESPONSIVE MOBILE
     ══════════════════════════════════ */
     @media (max-width: 640px) {
-      body {
-        padding: 16px 4px;
-        gap: 20px;
-      }
-
-      .page-wrapper {
-        gap: 0;
-      }
-
-      .flowers {
-        min-width: 36px;
-        padding: 8px 0;
-      }
-
-      .flowers svg {
-        width: 36px;
-        height: auto;
-      }
-
-      .card {
-        padding: 36px 20px 32px;
-      }
-
-      .card::before {
-        top: 8px; left: 8px; right: 8px; bottom: 8px;
-      }
-
-      .title {
-        font-size: 1.35rem;
-        margin-top: 12px;
-      }
-
-      .stanza {
-        font-size: 1rem;
-        line-height: 1.75;
-        margin-bottom: 16px;
-      }
-
-      .divider {
-        letter-spacing: 5px;
-        margin: 10px 0 16px;
-      }
-
-      .carousel-card {
-        padding: 32px 16px 28px;
-      }
-
+      body { padding: 16px 4px; gap: 20px; }
+      .page-wrapper { gap: 0; }
+      .flowers { min-width: 36px; padding: 8px 0; }
+      .vine { width: 36px; }
+      .card { padding: 36px 20px 32px; }
+      .card::before { top: 8px; left: 8px; right: 8px; bottom: 8px; }
+      .title { font-size: 1.35rem; margin-top: 12px; }
+      .stanza { font-size: 1rem; line-height: 1.75; margin-bottom: 16px; }
+      .divider { letter-spacing: 5px; margin: 10px 0 16px; }
+      .carousel-card { padding: 32px 16px 28px; }
       .carousel-title { font-size: 1.1rem; }
-
-      .carousel-track img,
-      .placeholder-slide { height: 220px; }
-
+      .carousel-track img, .placeholder-slide { height: 220px; }
       .carousel-wrapper { max-width: 100%; }
-
-      .insta-text {
-        font-size: 0.95rem;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .dynamic-link,
-      .insta-link {
-        padding: 8px 20px;
-        font-size: 0.88rem;
-      }
-
-      .signature {
-        font-size: 0.95rem;
-        margin-top: 20px;
-      }
-
+      .insta-text { font-size: 0.95rem; flex-direction: column; gap: 12px; }
+      .dynamic-link, .insta-link { padding: 8px 20px; font-size: 0.88rem; }
+      .signature { font-size: 0.95rem; margin-top: 20px; }
       .signature .name img { height: 48px; }
     }
 
     @media (max-width: 380px) {
-      .flowers {
-        min-width: 28px;
-      }
-
-      .flowers svg {
-        width: 28px;
-      }
-
-      .card {
-        padding: 28px 14px 24px;
-      }
-
+      .flowers { min-width: 28px; }
+      .vine { width: 28px; }
+      .card { padding: 28px 14px 24px; }
       .title { font-size: 1.2rem; }
-
       .stanza { font-size: 0.92rem; }
-
-      .carousel-track img,
-      .placeholder-slide { height: 180px; }
+      .carousel-track img, .placeholder-slide { height: 180px; }
     }
   </style>
 </head>
 <body>
 
+<!-- ══ SVG fleur grimpante (template réutilisable via JS) ══ -->
+<template id="vine-tpl">
+  <div class="vine">
+    <svg viewBox="0 0 52 400" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <!-- Tige -->
+      <path class="vine-stem"
+        d="M26 390 Q22 340 27 300 Q32 255 24 210 Q17 165 27 120 Q35 75 26 30"
+        stroke="#8B7355" stroke-width="1.3" fill="none"/>
+
+      <!-- Feuilles gauche/droite alternées -->
+      <path class="vine-leaf l1" d="M26 330 Q7 318 5 300 Q17 310 26 330Z" fill="#7a9e7e" opacity="0.72"/>
+      <path class="vine-leaf l2" d="M26 290 Q45 278 47 260 Q35 270 26 290Z" fill="#7a9e7e" opacity="0.65"/>
+      <path class="vine-leaf l3" d="M26 235 Q8 222 6 205 Q18 215 26 235Z" fill="#7a9e7e" opacity="0.70"/>
+      <path class="vine-leaf l4" d="M26 195 Q44 182 46 165 Q34 175 26 195Z" fill="#7a9e7e" opacity="0.62"/>
+      <path class="vine-leaf l5" d="M26 145 Q8 132 6 115 Q18 125 26 145Z" fill="#7a9e7e" opacity="0.68"/>
+      <path class="vine-leaf l6" d="M26 105 Q44 92 46 75 Q34 85 26 105Z"  fill="#7a9e7e" opacity="0.60"/>
+
+      <!-- Fleur rose (bas) -->
+      <g class="vine-flower f1">
+        <circle cx="26" cy="360" r="5.5" fill="#e8a0a0" opacity="0.55"/>
+        <circle cx="26" cy="360" r="3.3" fill="#d47a7a" opacity="0.80"/>
+        <ellipse cx="19" cy="356" rx="5" ry="3"   transform="rotate(-30 19 356)" fill="#e8a0a0" opacity="0.52"/>
+        <ellipse cx="33" cy="356" rx="5" ry="3"   transform="rotate(30 33 356)"  fill="#e8a0a0" opacity="0.52"/>
+        <ellipse cx="26" cy="350" rx="4.5" ry="3" fill="#e8a0a0" opacity="0.48"/>
+        <ellipse cx="14" cy="364" rx="4" ry="2.5" transform="rotate(-50 14 364)" fill="#f0b8b8" opacity="0.42"/>
+        <ellipse cx="38" cy="364" rx="4" ry="2.5" transform="rotate(50 38 364)"  fill="#f0b8b8" opacity="0.42"/>
+      </g>
+
+      <!-- Bourgeon doré (milieu) -->
+      <g class="vine-flower f2">
+        <path d="M20 168 Q26 156 32 168 Q30 178 26 180 Q22 178 20 168Z" fill="#e8c06a" opacity="0.78"/>
+        <path d="M22 168 Q26 162 30 168" stroke="#c8a040" stroke-width="0.8" fill="none" opacity="0.6"/>
+      </g>
+
+      <!-- Fleur mauve (haut) -->
+      <g class="vine-flower f3">
+        <circle cx="26" cy="55"  r="5"   fill="#d4a0c8" opacity="0.62"/>
+        <circle cx="26" cy="55"  r="3"   fill="#b87aaa" opacity="0.80"/>
+        <ellipse cx="19" cy="51" rx="4.5" ry="2.8" transform="rotate(-30 19 51)" fill="#d4a0c8" opacity="0.52"/>
+        <ellipse cx="33" cy="51" rx="4.5" ry="2.8" transform="rotate(30 33 51)"  fill="#d4a0c8" opacity="0.52"/>
+        <ellipse cx="26" cy="46" rx="4"   ry="2.8" fill="#d4a0c8" opacity="0.48"/>
+      </g>
+    </svg>
+  </div>
+</template>
+
 <!-- ══ CARTE 1 : Intro + appareil ══ -->
 <div class="page-wrapper">
-  <div class="flowers" aria-hidden="true">
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.82"><path d="M26 40 Q24 90 26 145" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 100 Q10 88 8 75 Q18 82 26 100Z" fill="#7a9e7e" opacity="0.7"/><path d="M26 110 Q40 98 44 85 Q34 93 26 110Z" fill="#7a9e7e" opacity="0.6"/><circle cx="26" cy="28" r="5" fill="#e8a0a0" opacity="0.6"/><circle cx="26" cy="28" r="3.2" fill="#d47a7a" opacity="0.7"/><ellipse cx="19" cy="24" rx="5" ry="3" transform="rotate(-30 19 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="33" cy="24" rx="5" ry="3" transform="rotate(30 33 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="26" cy="18" rx="4" ry="3" fill="#e8a0a0" opacity="0.5"/><ellipse cx="14" cy="30" rx="4.5" ry="2.8" transform="rotate(-50 14 30)" fill="#f0b8b8" opacity="0.45"/><ellipse cx="38" cy="30" rx="4.5" ry="2.8" transform="rotate(50 38 30)" fill="#f0b8b8" opacity="0.45"/><circle cx="26" cy="150" r="3.5" fill="#d4a0c8" opacity="0.55"/><circle cx="26" cy="150" r="2" fill="#b87aaa" opacity="0.65"/><ellipse cx="20" cy="147" rx="3.5" ry="2" transform="rotate(-30 20 147)" fill="#d4a0c8" opacity="0.5"/><ellipse cx="32" cy="147" rx="3.5" ry="2" transform="rotate(30 32 147)" fill="#d4a0c8" opacity="0.5"/><ellipse cx="26" cy="143" rx="3" ry="2" fill="#d4a0c8" opacity="0.45"/></g></svg>
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.78"><path d="M26 10 Q28 70 26 140" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 60 Q12 48 10 34 Q20 42 26 60Z" fill="#7a9e7e" opacity="0.65"/><path d="M26 80 Q40 68 43 55 Q33 62 26 80Z" fill="#7a9e7e" opacity="0.6"/><path d="M20 12 Q26 2 32 12 Q30 20 26 22 Q22 20 20 12Z" fill="#e8c06a" opacity="0.7"/><path d="M22 12 Q26 8 30 12" stroke="#c8a040" stroke-width="0.8" fill="none" opacity="0.6"/><circle cx="26" cy="145" r="3" fill="#e8a0a0" opacity="0.5"/><ellipse cx="21" cy="142" rx="3" ry="1.8" transform="rotate(-30 21 142)" fill="#e8a0a0" opacity="0.45"/><ellipse cx="31" cy="142" rx="3" ry="1.8" transform="rotate(30 31 142)" fill="#e8a0a0" opacity="0.45"/></g></svg>
-  </div>
+  <div class="flowers" aria-hidden="true"></div>
 
   <main class="card" role="main">
     <p class="title">Salut à tous et <span class="highlight">joyeux anniversaire à moi</span>&nbsp;! 🎂</p>
@@ -372,18 +414,12 @@
     </p>
   </main>
 
-  <div class="flowers" aria-hidden="true" style="transform:scaleX(-1)">
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.82"><path d="M26 40 Q24 90 26 145" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 100 Q10 88 8 75 Q18 82 26 100Z" fill="#7a9e7e" opacity="0.7"/><path d="M26 110 Q40 98 44 85 Q34 93 26 110Z" fill="#7a9e7e" opacity="0.6"/><circle cx="26" cy="28" r="5" fill="#e8a0a0" opacity="0.6"/><circle cx="26" cy="28" r="3.2" fill="#d47a7a" opacity="0.7"/><ellipse cx="19" cy="24" rx="5" ry="3" transform="rotate(-30 19 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="33" cy="24" rx="5" ry="3" transform="rotate(30 33 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="26" cy="18" rx="4" ry="3" fill="#e8a0a0" opacity="0.5"/><ellipse cx="14" cy="30" rx="4.5" ry="2.8" transform="rotate(-50 14 30)" fill="#f0b8b8" opacity="0.45"/><ellipse cx="38" cy="30" rx="4.5" ry="2.8" transform="rotate(50 38 30)" fill="#f0b8b8" opacity="0.45"/><circle cx="26" cy="150" r="3.5" fill="#d4a0c8" opacity="0.55"/><circle cx="26" cy="150" r="2" fill="#b87aaa" opacity="0.65"/><ellipse cx="20" cy="147" rx="3.5" ry="2" transform="rotate(-30 20 147)" fill="#d4a0c8" opacity="0.5"/><ellipse cx="32" cy="147" rx="3.5" ry="2" transform="rotate(30 32 147)" fill="#d4a0c8" opacity="0.5"/><ellipse cx="26" cy="143" rx="3" ry="2" fill="#d4a0c8" opacity="0.45"/></g></svg>
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.78"><path d="M26 10 Q28 70 26 140" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 60 Q12 48 10 34 Q20 42 26 60Z" fill="#7a9e7e" opacity="0.65"/><path d="M26 80 Q40 68 43 55 Q33 62 26 80Z" fill="#7a9e7e" opacity="0.6"/><path d="M20 12 Q26 2 32 12 Q30 20 26 22 Q22 20 20 12Z" fill="#e8c06a" opacity="0.7"/><path d="M22 12 Q26 8 30 12" stroke="#c8a040" stroke-width="0.8" fill="none" opacity="0.6"/><circle cx="26" cy="145" r="3" fill="#e8a0a0" opacity="0.5"/><ellipse cx="21" cy="142" rx="3" ry="1.8" transform="rotate(-30 21 142)" fill="#e8a0a0" opacity="0.45"/><ellipse cx="31" cy="142" rx="3" ry="1.8" transform="rotate(30 31 142)" fill="#e8a0a0" opacity="0.45"/></g></svg>
-  </div>
+  <div class="flowers" aria-hidden="true" style="transform:scaleX(-1)"></div>
 </div>
 
 <!-- ══ CARTE 2 : Cagnotte ══ -->
 <div class="page-wrapper">
-  <div class="flowers" aria-hidden="true">
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.82"><path d="M26 40 Q24 90 26 145" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 100 Q10 88 8 75 Q18 82 26 100Z" fill="#7a9e7e" opacity="0.7"/><path d="M26 110 Q40 98 44 85 Q34 93 26 110Z" fill="#7a9e7e" opacity="0.6"/><circle cx="26" cy="28" r="5" fill="#e8a0a0" opacity="0.6"/><circle cx="26" cy="28" r="3.2" fill="#d47a7a" opacity="0.7"/><ellipse cx="19" cy="24" rx="5" ry="3" transform="rotate(-30 19 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="33" cy="24" rx="5" ry="3" transform="rotate(30 33 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="26" cy="18" rx="4" ry="3" fill="#e8a0a0" opacity="0.5"/><circle cx="26" cy="150" r="3.5" fill="#d4a0c8" opacity="0.55"/><circle cx="26" cy="150" r="2" fill="#b87aaa" opacity="0.65"/></g></svg>
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.78"><path d="M26 10 Q28 70 26 140" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 60 Q12 48 10 34 Q20 42 26 60Z" fill="#7a9e7e" opacity="0.65"/><path d="M26 80 Q40 68 43 55 Q33 62 26 80Z" fill="#7a9e7e" opacity="0.6"/><path d="M20 12 Q26 2 32 12 Q30 20 26 22 Q22 20 20 12Z" fill="#e8c06a" opacity="0.7"/></g></svg>
-  </div>
+  <div class="flowers" aria-hidden="true"></div>
 
   <section class="card" aria-label="Cagnotte">
     <div class="divider" style="margin-top:8px;">✦ &nbsp; ✦ &nbsp; ✦</div>
@@ -394,49 +430,43 @@
     </p>
   </section>
 
-  <div class="flowers" aria-hidden="true" style="transform:scaleX(-1)">
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.82"><path d="M26 40 Q24 90 26 145" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 100 Q10 88 8 75 Q18 82 26 100Z" fill="#7a9e7e" opacity="0.7"/><path d="M26 110 Q40 98 44 85 Q34 93 26 110Z" fill="#7a9e7e" opacity="0.6"/><circle cx="26" cy="28" r="5" fill="#e8a0a0" opacity="0.6"/><circle cx="26" cy="28" r="3.2" fill="#d47a7a" opacity="0.7"/><ellipse cx="19" cy="24" rx="5" ry="3" transform="rotate(-30 19 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="33" cy="24" rx="5" ry="3" transform="rotate(30 33 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="26" cy="18" rx="4" ry="3" fill="#e8a0a0" opacity="0.5"/><circle cx="26" cy="150" r="3.5" fill="#d4a0c8" opacity="0.55"/><circle cx="26" cy="150" r="2" fill="#b87aaa" opacity="0.65"/></g></svg>
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.78"><path d="M26 10 Q28 70 26 140" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 60 Q12 48 10 34 Q20 42 26 60Z" fill="#7a9e7e" opacity="0.65"/><path d="M26 80 Q40 68 43 55 Q33 62 26 80Z" fill="#7a9e7e" opacity="0.6"/><path d="M20 12 Q26 2 32 12 Q30 20 26 22 Q22 20 20 12Z" fill="#e8c06a" opacity="0.7"/></g></svg>
-  </div>
+  <div class="flowers" aria-hidden="true" style="transform:scaleX(-1)"></div>
 </div>
 
 <!-- ══ CARTE 3 : Galerie ══ -->
 <div class="page-wrapper">
-  <div class="flowers" aria-hidden="true">
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.82"><path d="M26 40 Q24 90 26 145" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 100 Q10 88 8 75 Q18 82 26 100Z" fill="#7a9e7e" opacity="0.7"/><path d="M26 110 Q40 98 44 85 Q34 93 26 110Z" fill="#7a9e7e" opacity="0.6"/><circle cx="26" cy="28" r="5" fill="#e8a0a0" opacity="0.6"/><circle cx="26" cy="28" r="3.2" fill="#d47a7a" opacity="0.7"/><ellipse cx="19" cy="24" rx="5" ry="3" transform="rotate(-30 19 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="33" cy="24" rx="5" ry="3" transform="rotate(30 33 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="26" cy="18" rx="4" ry="3" fill="#e8a0a0" opacity="0.5"/><circle cx="26" cy="150" r="3.5" fill="#d4a0c8" opacity="0.55"/><circle cx="26" cy="150" r="2" fill="#b87aaa" opacity="0.65"/></g></svg>
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.78"><path d="M26 10 Q28 70 26 140" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 60 Q12 48 10 34 Q20 42 26 60Z" fill="#7a9e7e" opacity="0.65"/><path d="M26 80 Q40 68 43 55 Q33 62 26 80Z" fill="#7a9e7e" opacity="0.6"/><path d="M20 12 Q26 2 32 12 Q30 20 26 22 Q22 20 20 12Z" fill="#e8c06a" opacity="0.7"/></g></svg>
-  </div>
+  <div class="flowers" aria-hidden="true"></div>
 
   <section class="card carousel-card" aria-label="Galerie photos">
     <p class="carousel-title"><em>Un avant-goût des instants que je capture déjà…</em></p>
     <div class="divider">✦ &nbsp; ✦ &nbsp; ✦</div>
-
     <div class="carousel-wrapper">
       <div class="carousel-track-container">
         <div class="carousel-track" id="carouselTrack"></div>
       </div>
     </div>
     <div class="carousel-dots" id="carouselDots"></div>
-
     <p class="insta-text">
       <em>Si vous voulez en voir plus, c&rsquo;est par ici&nbsp;</em>
       <a class="insta-link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">📷 Mon Instagram</a>
     </p>
   </section>
 
-  <div class="flowers" aria-hidden="true" style="transform:scaleX(-1)">
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.82"><path d="M26 40 Q24 90 26 145" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 100 Q10 88 8 75 Q18 82 26 100Z" fill="#7a9e7e" opacity="0.7"/><path d="M26 110 Q40 98 44 85 Q34 93 26 110Z" fill="#7a9e7e" opacity="0.6"/><circle cx="26" cy="28" r="5" fill="#e8a0a0" opacity="0.6"/><circle cx="26" cy="28" r="3.2" fill="#d47a7a" opacity="0.7"/><ellipse cx="19" cy="24" rx="5" ry="3" transform="rotate(-30 19 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="33" cy="24" rx="5" ry="3" transform="rotate(30 33 24)" fill="#e8a0a0" opacity="0.55"/><ellipse cx="26" cy="18" rx="4" ry="3" fill="#e8a0a0" opacity="0.5"/><circle cx="26" cy="150" r="3.5" fill="#d4a0c8" opacity="0.55"/><circle cx="26" cy="150" r="2" fill="#b87aaa" opacity="0.65"/></g></svg>
-    <svg width="52" height="180" viewBox="0 0 52 180" fill="none"><g opacity="0.78"><path d="M26 10 Q28 70 26 140" stroke="#8B7355" stroke-width="1.2" fill="none"/><path d="M26 60 Q12 48 10 34 Q20 42 26 60Z" fill="#7a9e7e" opacity="0.65"/><path d="M26 80 Q40 68 43 55 Q33 62 26 80Z" fill="#7a9e7e" opacity="0.6"/><path d="M20 12 Q26 2 32 12 Q30 20 26 22 Q22 20 20 12Z" fill="#e8c06a" opacity="0.7"/></g></svg>
-  </div>
+  <div class="flowers" aria-hidden="true" style="transform:scaleX(-1)"></div>
 </div>
 
 <script>
-
   // ── Signature ──────────────────────────────
   const SIG_URL = "https://i.ibb.co/Rpt7LQp2/IMG-5756-Any-Eraser.png";
   document.getElementById("signature").src = SIG_URL;
-// ───────────────────────────────────────────
 
+  // ── Injection des fleurs grimpantes ────────
+  const tpl = document.getElementById('vine-tpl');
+  document.querySelectorAll('.flowers').forEach(el => {
+    el.appendChild(tpl.content.cloneNode(true));
+  });
+
+  // ── Carousel ───────────────────────────────
   let currentSlide = 0;
   const track = document.getElementById('carouselTrack');
   const dotsContainer = document.getElementById('carouselDots');
