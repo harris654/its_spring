@@ -433,7 +433,7 @@
 <script>
 
   // ── Signature ──────────────────────────────
-  const SIG_URL = "https://i.ibb.co/5WCgCq9N/sig.jpg";
+  const SIG_URL = "https://i.ibb.co/Rpt7LQp2/IMG-5756-Any-Eraser.png";
   document.getElementById("signature").src = SIG_URL;
 // ───────────────────────────────────────────
 
@@ -458,7 +458,7 @@
         if (!files || files.length === 0) throw new Error();
         files.forEach((filename, i) => {
           const img = document.createElement('img');
-          img.src = 'galerie/' + filename;
+          img.src = filename;
           img.alt = 'Photo ' + (i + 1);
           img.onerror = function() {
             const ph = document.createElement('div');
