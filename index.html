@@ -452,7 +452,7 @@
   function moveCarousel(dir) { goToSlide(currentSlide + dir); }
 
   function initCarousel() {
-    fetch('galerie/images_referentiel.json')
+    fetch('./galerie/images_referentiel.json')
       .then(res => { if (!res.ok) throw new Error(); return res.json(); })
       .then(files => {
         if (!files || files.length === 0) throw new Error();
