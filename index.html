@@ -54,37 +54,25 @@
     .vine-stem {
       stroke-dasharray: 400;
       stroke-dashoffset: 400;
-      animation: grow-stem 5s ease-in-out forwards;
+      /* durée injectée par JS */
     }
 
     .vine-leaf {
       opacity: 0;
       transform-box: fill-box;
       transform-origin: right center;
-      animation: bloom-leaf 0.6s ease-out forwards, sway 3.5s ease-in-out 3s infinite;
+      /* delays injectés par JS */
     }
-    .vine-leaf        { animation: bloom-leaf 0.6s ease-out forwards, sway 3.5s ease-in-out 6s infinite; }
-    .vine-leaf.l2     { animation-delay: 1.2s,  6.2s; }
-    .vine-leaf.l3     { animation-delay: 1.8s,  6.4s; }
-    .vine-leaf.l4     { animation-delay: 2.4s,  6.6s; }
-    .vine-leaf.l5     { animation-delay: 3.0s,  6.8s; }
-    .vine-leaf.l6     { animation-delay: 3.5s,  7.0s; }
-
-    .vine-flower.f1   { animation-delay: 4.0s,  7.5s; }
-    .vine-flower.f2   { animation-delay: 4.5s,  8.0s; }
-    .vine-flower.f3   { animation-delay: 5.0s,  8.5s; }
-
+    .vine-leaf.l2 { transform-origin: left center; }
+    .vine-leaf.l4 { transform-origin: left center; }
+    .vine-leaf.l6 { transform-origin: left center; }
 
     .vine-flower {
       opacity: 0;
       transform-box: fill-box;
       transform-origin: center;
-      animation: bloom-flower 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
-                 float 4s ease-in-out infinite;
+      /* delays injectés par JS */
     }
-    .vine-flower.f1   { animation-delay: 4.0s,  7.5s; }
-    .vine-flower.f2   { animation-delay: 4.5s,  8.0s; }
-    .vine-flower.f3   { animation-delay: 5.0s,  8.5s; }
 
     @keyframes grow-stem {
       to { stroke-dashoffset: 0; }
@@ -396,7 +384,6 @@
 <!-- ══ CARTE 1 : Intro + appareil ══ -->
 <div class="page-wrapper">
   <div class="flowers" aria-hidden="true"></div>
-
   <main class="card" role="main">
     <p class="title">Salut à tous et <span class="highlight">joyeux anniversaire à moi</span>&nbsp;! 🎂</p>
     <div class="divider">✦ &nbsp; ✦ &nbsp; ✦</div>
@@ -413,14 +400,12 @@
       <span class="name"><img id="signature" alt="Maria" /></span>
     </p>
   </main>
-
   <div class="flowers" aria-hidden="true" style="transform:scaleX(-1)"></div>
 </div>
 
 <!-- ══ CARTE 2 : Cagnotte ══ -->
 <div class="page-wrapper">
   <div class="flowers" aria-hidden="true"></div>
-
   <section class="card" aria-label="Cagnotte">
     <div class="divider" style="margin-top:8px;">✦ &nbsp; ✦ &nbsp; ✦</div>
     <p class="stanza">Pour m'aider à concrétiser ce beau projet,<br/>j'ai mis en place<br/><span class="highlight">💛 une cagnotte commune 💛</span></p>
@@ -429,14 +414,12 @@
       <a class="dynamic-link" href="https://www.canon.fr/cameras/eos-r2/" target="_blank" rel="noopener noreferrer">💛 Participer à la cagnotte</a>
     </p>
   </section>
-
   <div class="flowers" aria-hidden="true" style="transform:scaleX(-1)"></div>
 </div>
 
 <!-- ══ CARTE 3 : Galerie ══ -->
 <div class="page-wrapper">
   <div class="flowers" aria-hidden="true"></div>
-
   <section class="card carousel-card" aria-label="Galerie photos">
     <p class="carousel-title"><em>Un avant-goût des instants que je capture déjà…</em></p>
     <div class="divider">✦ &nbsp; ✦ &nbsp; ✦</div>
@@ -451,7 +434,6 @@
       <a class="insta-link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">📷 Mon Instagram</a>
     </p>
   </section>
-
   <div class="flowers" aria-hidden="true" style="transform:scaleX(-1)"></div>
 </div>
 
@@ -460,11 +442,57 @@
   const SIG_URL = "https://i.ibb.co/Rpt7LQp2/IMG-5756-Any-Eraser.png";
   document.getElementById("signature").src = SIG_URL;
 
+    // ══ Variable unique : changer ce chiffre suffit ══
+  const GROW_DURATION = 20; // secondes
+
   // ── Injection des fleurs grimpantes ────────
   const tpl = document.getElementById('vine-tpl');
   document.querySelectorAll('.flowers').forEach(el => {
     el.appendChild(tpl.content.cloneNode(true));
   });
+
+
+  function applyVineAnimations() {
+    const d = GROW_DURATION;
+
+    const leafDelays = [
+      d * 0.35,  // l1 — bas gauche
+      d * 0.45,  // l2 — bas droite
+      d * 0.54,  // l3 — milieu gauche
+      d * 0.63,  // l4 — milieu droite
+      d * 0.72,  // l5 — haut gauche
+      d * 0.81,  // l6 — haut droite
+    ];
+
+    const flowerDelays = [
+      d * 0.85,  // f1 — fleur rose (bas)
+      d * 0.92,  // f2 — bourgeon doré (milieu)
+      d * 1.00,  // f3 — fleur mauve (haut)
+    ];
+
+    const swayStart = d + 2;
+
+    // Traiter chaque vine individuellement
+    document.querySelectorAll('.vine').forEach(vine => {
+
+      vine.querySelectorAll('.vine-stem').forEach(el => {
+        el.style.animation = `grow-stem ${d}s ease-in-out forwards`;
+      });
+
+      vine.querySelectorAll('.vine-leaf').forEach((el, i) => {
+        const ld = leafDelays[i] ?? leafDelays[leafDelays.length - 1];
+        el.style.animation = `bloom-leaf 0.6s ease-out ${ld}s forwards, sway 3.5s ease-in-out ${swayStart + i * 0.2}s infinite`;
+      });
+
+      vine.querySelectorAll('.vine-flower').forEach((el, i) => {
+        const fd = flowerDelays[i] ?? flowerDelays[flowerDelays.length - 1];
+        el.style.animation = `bloom-flower 0.8s cubic-bezier(0.34,1.56,0.64,1) ${fd}s forwards, float 4s ease-in-out ${swayStart + 1 + i * 0.5}s infinite`;
+      });
+
+    });
+  }
+
+  applyVineAnimations();
 
   // ── Carousel ───────────────────────────────
   let currentSlide = 0;
