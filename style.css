@@ -216,7 +216,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin-top: 28px;
+  margin-bottom: 28px;
 }
 .nav-pages a {
   text-decoration: none;
