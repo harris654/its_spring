@@ -2,6 +2,46 @@
 const GROW_DURATION = 20; // secondes
 // ════════════════════════════════════════
 
+// ── Navigation ───────────────────────────
+const NAV_LINKS = [
+  { href: 'index.html',  label: 'Accueil' },
+  { href: 'infos.html',  label: 'Infos pratiques' },
+  { href: 'menu.html',   label: 'Menu' },
+  { href: 'cadeau.html', label: 'Cadeau' },
+];
+
+const currentPage = location.pathname.split('/').pop() || 'index.html';
+
+const nav = document.createElement('div');
+nav.className = 'nav-pages';
+nav.innerHTML = NAV_LINKS.map(({ href, label }) =>
+  `<a href="${href}"${href === currentPage ? ' class="active"' : ''}>${label}</a>`
+).join('\n');
+
+const card = document.querySelector('.card');
+card.insertAdjacentElement('afterbegin', nav);
+
+// ── Structure (canvas + wrapper + flowers) ─
+const canvas = document.createElement('canvas');
+canvas.id = 'falling-leaves';
+document.body.insertAdjacentElement('afterbegin', canvas);
+
+const flowerLeft  = document.createElement('div');
+flowerLeft.className = 'flowers';
+flowerLeft.setAttribute('aria-hidden', 'true');
+
+const flowerRight = document.createElement('div');
+flowerRight.className = 'flowers';
+flowerRight.setAttribute('aria-hidden', 'true');
+flowerRight.style.transform = 'scaleX(-1)';
+
+const wrapper = document.createElement('div');
+wrapper.className = 'page-wrapper';
+card.parentNode.insertBefore(wrapper, card);
+wrapper.appendChild(flowerLeft);
+wrapper.appendChild(card);
+wrapper.appendChild(flowerRight);
+
 // ── Injection du template SVG ────────────
 document.body.insertAdjacentHTML('afterbegin', `
 <template id="vine-tpl">
@@ -74,68 +114,65 @@ function applyVineAnimations() {
 applyVineAnimations();
 
 // ── Feuilles qui tombent ─────────────────
-const canvas = document.getElementById('falling-leaves');
-if (canvas) {
-  const ctx = canvas.getContext('2d');
-  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-  resize();
-  window.addEventListener('resize', resize);
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
 
-  const COLORS = [
-    '#7a9e7e','#a8c5a0','#8fb88f',
-    '#e8a0a0','#d47a7a','#f0b8b8',
-    '#d4a0c8','#b87aaa',
-    '#e8c06a','#c8a040',
-  ];
+const COLORS = [
+  '#7a9e7e','#a8c5a0','#8fb88f',
+  '#e8a0a0','#d47a7a','#f0b8b8',
+  '#d4a0c8','#b87aaa',
+  '#e8c06a','#c8a040',
+];
 
-  class Leaf {
-    constructor() { this.reset(true); }
-    reset(init = false) {
-      this.x        = Math.random() * canvas.width;
-      this.y        = init ? Math.random() * -canvas.height : -20;
-      this.size     = 6 + Math.random() * 10;
-      this.speedY   = 0.4 + Math.random() * 0.8;
-      this.speedX   = (Math.random() - 0.5) * 0.6;
-      this.angle    = Math.random() * Math.PI * 2;
-      this.spin     = (Math.random() - 0.5) * 0.03;
-      this.sway     = Math.random() * Math.PI * 2;
-      this.swaySpeed= 0.01 + Math.random() * 0.015;
-      this.swayAmp  = 0.5 + Math.random() * 1.2;
-      this.color    = COLORS[Math.floor(Math.random() * COLORS.length)];
-      this.opacity  = 0.25 + Math.random() * 0.35;
-    }
-    update() {
-      this.sway  += this.swaySpeed;
-      this.x     += this.speedX + Math.sin(this.sway) * this.swayAmp;
-      this.y     += this.speedY;
-      this.angle += this.spin;
-      if (this.y > canvas.height + 20) this.reset();
-    }
-    draw() {
-      ctx.save();
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.angle);
-      ctx.globalAlpha = this.opacity;
-      ctx.fillStyle = this.color;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, this.size * 0.38, this.size, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(0,0,0,0.12)';
-      ctx.lineWidth = 0.6;
-      ctx.beginPath();
-      ctx.moveTo(0, -this.size);
-      ctx.lineTo(0,  this.size);
-      ctx.stroke();
-      ctx.restore();
-    }
+class Leaf {
+  constructor() { this.reset(true); }
+  reset(init = false) {
+    this.x        = Math.random() * canvas.width;
+    this.y        = init ? Math.random() * -canvas.height : -20;
+    this.size     = 6 + Math.random() * 10;
+    this.speedY   = 0.4 + Math.random() * 0.8;
+    this.speedX   = (Math.random() - 0.5) * 0.6;
+    this.angle    = Math.random() * Math.PI * 2;
+    this.spin     = (Math.random() - 0.5) * 0.03;
+    this.sway     = Math.random() * Math.PI * 2;
+    this.swaySpeed= 0.01 + Math.random() * 0.015;
+    this.swayAmp  = 0.5 + Math.random() * 1.2;
+    this.color    = COLORS[Math.floor(Math.random() * COLORS.length)];
+    this.opacity  = 0.25 + Math.random() * 0.35;
   }
-
-  const COUNT = Math.min(Math.floor(window.innerWidth / 18), 55);
-  const leaves = Array.from({ length: COUNT }, () => new Leaf());
-
-  (function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    leaves.forEach(l => { l.update(); l.draw(); });
-    requestAnimationFrame(animate);
-  })();
+  update() {
+    this.sway  += this.swaySpeed;
+    this.x     += this.speedX + Math.sin(this.sway) * this.swayAmp;
+    this.y     += this.speedY;
+    this.angle += this.spin;
+    if (this.y > canvas.height + 20) this.reset();
+  }
+  draw() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle);
+    ctx.globalAlpha = this.opacity;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, this.size * 0.38, this.size, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+    ctx.lineWidth = 0.6;
+    ctx.beginPath();
+    ctx.moveTo(0, -this.size);
+    ctx.lineTo(0,  this.size);
+    ctx.stroke();
+    ctx.restore();
+  }
 }
+
+const COUNT = Math.min(Math.floor(window.innerWidth / 18), 55);
+const leaves = Array.from({ length: COUNT }, () => new Leaf());
+
+(function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  leaves.forEach(l => { l.update(); l.draw(); });
+  requestAnimationFrame(animate);
+})();
