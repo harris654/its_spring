@@ -141,6 +141,12 @@ body {
 
 .no-gap { margin-bottom: 4px; }
 
+/* ── Flou adresse ── */
+.blurred {
+  filter: blur(5px);
+  user-select: none;
+}
+
 /* ── Infos pratiques ── */
 .info-list {
   list-style: none;
